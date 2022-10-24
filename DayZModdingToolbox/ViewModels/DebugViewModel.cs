@@ -95,14 +95,38 @@ namespace DayZModdingToolbox.ViewModels
                             packing.Add(Process.Start(Path.Combine(Settings.Instance.PathDayzTools, "Bin", "AddonBuilder", "AddonBuilder.exe"),
                                 $"{mod.GetWorkdriveLinkPath()} {mod.GetPboDir()} -clear"));
                         }
-
                     }
-
                 });
+
+            StartMpDebugging = new(() =>
+            {
+                List<string> serverMods = new();
+                List<string> clientMods = new();
+
+                foreach (ModData mod in Settings.Instance.Mods)
+                {
+                    if (mod.IsActive)
+                    {
+                        if (mod.Clientmod)
+                        {
+                            clientMods.Add(mod.GetPboDir());
+                        }
+                        serverMods.Add(mod.GetPboDir());
+                    }
+                }
+                string filePatching = Settings.Instance.Filepatching ? "-filePatching" : "";
+                string diagServerArgs = $"-mod={string.Join(';', serverMods)} {filePatching} -server -config=serverDZ.cfg";
+                string diagClientArgs = $"-mod={string.Join(';', clientMods)} {filePatching} -connect=127.0.0.1 -port={Settings.Instance.ServerPort}";
+
+                Process.Start(Path.Combine(Settings.Instance.PathDayz, "DayZDiag_x64.exe"), diagServerArgs);
+                Process.Start(Path.Combine(Settings.Instance.PathDayz, "DayZDiag_x64.exe"), diagClientArgs);
+            });
         }
 
         public Command BuildPbos { get; }
         public Command RemoveAllModLinks { get; }
         public Command SetupModLinks { get; }
+
+        public Command StartMpDebugging { get; }
     }
 }

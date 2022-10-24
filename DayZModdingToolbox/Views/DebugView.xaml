@@ -21,8 +21,9 @@
                     Command="{Binding RemoveAllModLinks}" />
             <Button Content="Build PBOs"
                     Command="{Binding BuildPbos}" />
-            <Button Content="Start Offline Debugging" />
-            <Button Content="Start MP Debugging" />
+            <!--<Button Content="Start Offline Debugging" />-->
+            <Button Content="Start MP Debugging"
+                    Command="{Binding StartMpDebugging}" />
         </StackPanel>
     </Grid>
 </UserControl>
