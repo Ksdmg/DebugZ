@@ -18,17 +18,21 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
-
         <StackPanel>
             <Grid>
-
                 <StackPanel>
-                    <TextBlock Text="Mods" />
-                    <DataGrid Height="200"
+                    <mah:MetroHeader>
+                        <TextBlock Text="Mods - Drag and Drop enabled" FontSize="18" />
+                    </mah:MetroHeader>
+
+                    <DataGrid  x:Name="ModGrid"
+                              Height="200"
                               HorizontalAlignment="Stretch"
                               ItemsSource="{Binding Mods}"
                               AutoGenerateColumns="False"
-                              x:Name="ModGrid">
+                              PreviewDragOver="ModGrid_PreviewDragOver"
+                              Drop="ModGrid_Drop"
+                              AllowDrop="True">
                         <DataGrid.Columns>
                             <DataGridCheckBoxColumn Header="Active"
                                                     Binding="{Binding IsActive}" />
