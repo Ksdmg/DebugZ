@@ -1,5 +1,4 @@
 ﻿using System.Collections.ObjectModel;
-using System.IO;
 using System.Linq;
 
 using DayZModdingToolbox.Common;
@@ -9,17 +8,14 @@ namespace DayZModdingToolbox.ViewModels
 {
     public class SettingsViewModel : BindableBase
     {
+        private static SettingsViewModel instance;
         private bool _filepatching;
         private ObservableCollection<ModData> _mods;
         private string _pathDayz;
         private string _pathDayzTools;
-
         private string _pathProfiles;
-
         private string _pathWorkdrive;
-
         private string _serverConfigPath;
-
         private int _serverPort;
 
         public SettingsViewModel()
@@ -35,19 +31,59 @@ namespace DayZModdingToolbox.ViewModels
 
             Save = new(() =>
             {
-                UpdateList.Execute(new());
+                UpdateList!.Execute(new());
                 Settings.Instance.Mods = this.Mods.ToList();
                 Settings.Instance.Save();
             });
 
             UpdateList = new(() =>
             {
-                foreach (var mod in Mods)
+                ModsChanged();
+            });
+
+            BuildAllPbos = new(() =>
+            {
+                foreach (ModData mod in Mods)
                 {
-                    mod.Update();
+                    mod.BuildPbo = true;
                 }
             });
+
+            BuildNoPbos = new(() =>
+            {
+                foreach (ModData mod in Mods)
+                {
+                    mod.BuildPbo = false;
+                }
+            });
+
+            _mods.CollectionChanged += this.ModsCollectionChanged;
+
+            instance = this;
         }
+
+        public static SettingsViewModel Instance
+        {
+            get
+            {
+                return instance;
+            }
+        }
+
+        public int ActiveModsCount
+        {
+            get
+            {
+                return Mods.Count(x => x.IsActive);
+            }
+            set
+            {
+                RaisePropertyChanged(nameof(ActiveModsCount));
+            }
+        }
+
+        public Command BuildAllPbos { get; }
+        public Command BuildNoPbos { get; }
 
         public bool Filepatching
         {
@@ -61,6 +97,18 @@ namespace DayZModdingToolbox.ViewModels
                 {
                     Settings.Instance.Filepatching = value;
                 }
+            }
+        }
+
+        public int FullyLinkedMods
+        {
+            get
+            {
+                return Mods.Count(x => x.HasDayzDirLink && x.HasWorkdriveLink);
+            }
+            set
+            {
+                RaisePropertyChanged(nameof(FullyLinkedMods));
             }
         }
 
@@ -171,6 +219,34 @@ namespace DayZModdingToolbox.ViewModels
             }
         }
 
+        public int TotalModsCount
+        {
+            get
+            {
+                return Mods.Count;
+            }
+            set { }
+        }
+
         public Command UpdateList { get; }
+
+        public static void ModsChanged()
+        {
+            if (instance != null)
+            {
+                foreach (ModData mod in instance.Mods)
+                {
+                    mod.Update();
+                }
+                instance?.RaisePropertyChanged(nameof(TotalModsCount));
+                instance?.RaisePropertyChanged(nameof(ActiveModsCount));
+                DebugViewModel.UpdateForeignBindings();
+            }
+        }
+
+        private void ModsCollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            ModsChanged();
+        }
     }
 }

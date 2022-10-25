@@ -22,17 +22,18 @@
             <Grid>
                 <StackPanel>
                     <mah:MetroHeader>
-                        <TextBlock Text="Mods - Drag and Drop enabled" FontSize="18" />
+                        <TextBlock Text="Mods - Drag and Drop enabled"
+                                   FontSize="18" />
                     </mah:MetroHeader>
 
                     <DataGrid  x:Name="ModGrid"
-                              Height="200"
-                              HorizontalAlignment="Stretch"
-                              ItemsSource="{Binding Mods}"
-                              AutoGenerateColumns="False"
-                              PreviewDragOver="ModGrid_PreviewDragOver"
-                              Drop="ModGrid_Drop"
-                              AllowDrop="True">
+                               Height="200"
+                               HorizontalAlignment="Stretch"
+                               ItemsSource="{Binding Mods}"
+                               AutoGenerateColumns="False"
+                               PreviewDragOver="ModGrid_PreviewDragOver"
+                               Drop="ModGrid_Drop"
+                               AllowDrop="True">
                         <DataGrid.Columns>
                             <DataGridCheckBoxColumn Header="Active"
                                                     Binding="{Binding IsActive}" />
@@ -42,6 +43,8 @@
                                                 Binding="{Binding ModPath}" />
                             <DataGridCheckBoxColumn Header="Clientmod"
                                                     Binding="{Binding Clientmod}" />
+                            <DataGridCheckBoxColumn Header="Build PBO"
+                                                    Binding="{Binding BuildPbo}" />
                             <DataGridCheckBoxColumn Header="Workdrive Link"
                                                     IsReadOnly="True"
                                                     Binding="{Binding HasWorkdriveLink}" />
@@ -54,6 +57,12 @@
                         <Button Content="Update Status"
                                 Height="30"
                                 Command="{Binding UpdateList}" />
+                        <Button Content="Check All PBO"
+                                Height="30"
+                                Command="{Binding BuildAllPbos}" />
+                        <Button Content="Uncheck All PBO"
+                                Height="30"
+                                Command="{Binding BuildNoPbos}" />
                     </StackPanel>
                 </StackPanel>
             </Grid>

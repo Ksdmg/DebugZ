@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Runtime.CompilerServices;
 
 using DayZModdingToolbox.Common;
 using DayZModdingToolbox.Data;
@@ -10,6 +11,8 @@ namespace DayZModdingToolbox.ViewModels
 {
     public class DebugViewModel : BindableBase
     {
+        private static DebugViewModel instance;
+
         public DebugViewModel()
         {
             SetupModLinks = new(() =>
@@ -58,6 +61,7 @@ namespace DayZModdingToolbox.ViewModels
                         }
                     }
                 }
+                UpdateForeignBindings();
             }
             );
 
@@ -82,14 +86,15 @@ namespace DayZModdingToolbox.ViewModels
                         Debug.Print(e.ToString());
                     }
                 }
+                UpdateForeignBindings();
             });
 
-            BuildPbos = new(async () =>
+            BuildPbos = new(() =>
                 {
                     List<Process> packing = new();
                     foreach (ModData mod in Settings.Instance.Mods)
                     {
-                        if (mod.IsActive)
+                        if (mod.IsActive && mod.BuildPbo)
                         {
                             if (!Directory.Exists(mod.GetPboDir())) Directory.CreateDirectory(mod.GetPboDir());
                             packing.Add(Process.Start(Path.Combine(Settings.Instance.PathDayzTools, "Bin", "AddonBuilder", "AddonBuilder.exe"),
@@ -121,12 +126,49 @@ namespace DayZModdingToolbox.ViewModels
                 Process.Start(Path.Combine(Settings.Instance.PathDayz, "DayZDiag_x64.exe"), diagServerArgs);
                 Process.Start(Path.Combine(Settings.Instance.PathDayz, "DayZDiag_x64.exe"), diagClientArgs);
             });
+
+            instance = this;
+        }
+
+        public static DebugViewModel Instance
+        { get { return instance; } }
+
+        public int ActiveModsCount
+        {
+            get
+            {
+                return SettingsViewModel is null ? 0 : SettingsViewModel.ActiveModsCount;
+            }
         }
 
         public Command BuildPbos { get; }
+
+        public int FullyLinkedMods
+        {
+            get
+            {
+                return SettingsViewModel is null ? 0 : SettingsViewModel.FullyLinkedMods;
+            }
+        }
+
         public Command RemoveAllModLinks { get; }
+
         public Command SetupModLinks { get; }
 
         public Command StartMpDebugging { get; }
+
+        private static SettingsViewModel? SettingsViewModel
+        {
+            get
+            {
+                return SettingsViewModel.Instance;
+            }
+        }
+
+        public static void UpdateForeignBindings()
+        {
+            instance?.RaisePropertyChanged(nameof(FullyLinkedMods));
+            instance?.RaisePropertyChanged(nameof(ActiveModsCount));
+        }
     }
 }

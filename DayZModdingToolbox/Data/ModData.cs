@@ -3,6 +3,7 @@ using System.IO;
 using System.Runtime.CompilerServices;
 
 using DayZModdingToolbox.Common;
+using DayZModdingToolbox.ViewModels;
 
 using Newtonsoft.Json.Linq;
 
@@ -18,10 +19,24 @@ namespace DayZModdingToolbox.Data
         private string _modPath;
         private bool _pathValid;
 
+        private bool buildPbo;
+
         public ModData()
         {
             _modPath = string.Empty;
             _modName = string.Empty;
+        }
+
+        public bool BuildPbo
+        {
+            get
+            {
+                return buildPbo;
+            }
+            set
+            {
+                SetProperty(ref buildPbo, value);
+            }
         }
 
         public bool Clientmod
@@ -148,7 +163,7 @@ namespace DayZModdingToolbox.Data
                     Update();
                 }
             }
-
+            //SettingsViewModel.ModsChanged();
             return retVal;
         }
     }

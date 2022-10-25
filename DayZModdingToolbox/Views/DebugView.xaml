@@ -14,16 +14,53 @@
         <vm:DebugViewModel />
     </UserControl.DataContext>
     <Grid>
-        <StackPanel>
-            <Button Content="Setup Modlinks"
-                    Command="{Binding SetupModLinks}" />
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <GroupBox Margin="10"
+                  Grid.Row="0"
+                  Grid.Column="0"
+                  Header="Modlinks">
+            <StackPanel>
+                <TextBlock>
+                    <Run Text="{Binding FullyLinkedMods, Mode=OneWay}" />
+                    <Run Text=" modlinks of total " />
+                    <Run Text="{Binding ActiveModsCount, Mode=OneWay}" />
+                    <Run Text=" active mods" />
+                </TextBlock>
+                <Button Content="Setup Modlinks"
+                        Height="50"
+                        Margin="10"
+                        Command="{Binding SetupModLinks}" />
+            </StackPanel>
+        </GroupBox>
+
+        <GroupBox Margin="10" Grid.Row="0"
+                  Grid.Column="1">
             <Button Content="Remove All Modlinks"
+                    Height="50"
+                    Margin="10"
                     Command="{Binding RemoveAllModLinks}" />
+        </GroupBox>
+        <GroupBox Margin="10" Grid.Row="1"
+                  Grid.Column="0">
             <Button Content="Build PBOs"
+                    Height="50"
+                    Margin="10"
                     Command="{Binding BuildPbos}" />
-            <!--<Button Content="Start Offline Debugging" />-->
+        </GroupBox>
+        <GroupBox Margin="10" Grid.Row="1"
+                   Grid.Column="1">
             <Button Content="Start MP Debugging"
+                    Height="50"
+                    Margin="10"
                     Command="{Binding StartMpDebugging}" />
-        </StackPanel>
+        </GroupBox>
     </Grid>
 </UserControl>
