@@ -1,11 +1,7 @@
-﻿using System.Diagnostics;
-using System.IO;
+﻿using System.IO;
 using System.Runtime.CompilerServices;
 
 using DayZModdingToolbox.Common;
-using DayZModdingToolbox.ViewModels;
-
-using Newtonsoft.Json.Linq;
 
 namespace DayZModdingToolbox.Data
 {
@@ -15,16 +11,16 @@ namespace DayZModdingToolbox.Data
         private bool _hasDayzDirLink;
         private bool _hasWorkdriveLink;
         private bool _isActive = true;
-        private string _modName;
-        private string _modPath;
+        private string _modName = string.Empty;
+        private string _modPath = string.Empty;
         private bool _pathValid;
 
         private bool buildPbo;
 
+        private string modpack = string.Empty;
+
         public ModData()
         {
-            _modPath = string.Empty;
-            _modName = string.Empty;
         }
 
         public bool BuildPbo
@@ -99,6 +95,18 @@ namespace DayZModdingToolbox.Data
             }
         }
 
+        public string Modpack
+        {
+            get
+            {
+                return modpack;
+            }
+            set
+            {
+                SetProperty(ref modpack, value);
+            }
+        }
+
         public string ModPath
         {
             get
@@ -125,17 +133,46 @@ namespace DayZModdingToolbox.Data
 
         public string GetDayzDirLinkPath()
         {
-            return Path.Combine(Settings.Instance.PathDayz, ModName);
+            return Path.Combine(Settings.Instance.PathDayz, GetModpackRelativePath(), "addons", ModName);
+        }
+
+        public string GetModDir()
+        {
+            return Path.Combine(Settings.Instance.PathWorkdrive, "Mods", GetModpackRelativePath(), ModName);
+        }
+
+        public string GetModpackDir()
+        {
+            return Path.Combine(Settings.Instance.PathWorkdrive, "Mods", Modpack);
+        }
+
+        public string GetModpackFullPath()
+        {
+            return Path.Combine(Settings.Instance.PathWorkdrive, "Mods", GetModpackRelativePath());
+        }
+
+        public string GetModpackRelativePath()
+        {
+            return string.IsNullOrWhiteSpace(modpack) ? string.Empty : Modpack;
         }
 
         public string GetPboDir()
         {
-            return Path.Combine(Settings.Instance.PathWorkdrive, "Mods", "@" + ModName, "addons");
+            if (string.IsNullOrWhiteSpace(modpack))
+            {
+                return Path.Combine(GetModDir(), "addons");
+            }
+            return Path.Combine(GetModDir(), "addons");
         }
 
         public string GetWorkdriveLinkPath()
         {
-            return Path.Combine(Settings.Instance.PathWorkdrive, ModName);
+            string modpack = string.Empty;
+            if (!string.IsNullOrWhiteSpace(GetModpackRelativePath()))
+            {
+                modpack = Path.Combine(GetModpackRelativePath(), "addons");
+            }
+            return Path.Combine(Settings.Instance.PathWorkdrive, modpack, ModName);
         }
 
         public void Update()

@@ -41,6 +41,8 @@
                                                 Binding="{Binding ModName}" />
                             <DataGridTextColumn Header="Path"
                                                 Binding="{Binding ModPath}" />
+                            <DataGridTextColumn Header="Modpack"
+                                                Binding="{Binding Modpack}" />
                             <DataGridCheckBoxColumn Header="Clientmod"
                                                     Binding="{Binding Clientmod}" />
                             <DataGridCheckBoxColumn Header="Build PBO"

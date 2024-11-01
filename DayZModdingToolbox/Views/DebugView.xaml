@@ -22,6 +22,8 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <GroupBox Margin="10"
                   Grid.Row="0"
@@ -57,10 +59,25 @@
         </GroupBox>
         <GroupBox Margin="10" Grid.Row="1"
                    Grid.Column="1">
+            <StackPanel>               
+            
+            <mah:ToggleSwitch OnContent="Client+Server"
+                              OffContent="Server"
+                              IsOn="{Binding ClientAndServerDebug}"/>
             <Button Content="Start MP Debugging"
                     Height="50"
                     Margin="10"
                     Command="{Binding StartMpDebugging}" />
+            </StackPanel>
+        </GroupBox>
+
+        <GroupBox Margin="10"
+                  Grid.Row="2"
+                  Grid.Column="1">
+            <Button Content="Start Workbench"
+                    Height="50"
+                    Margin="10"
+                    Command="{Binding StartWorkbench}" />
         </GroupBox>
     </Grid>
 </UserControl>

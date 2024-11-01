@@ -31,6 +31,7 @@ namespace DayZModdingToolbox
             var vm = new MainWindowViewModel();
             this.DataContext = vm;
             instance = this;
+            ViewModels.SettingsViewModel.ModsChanged();
         }
 
         public static async Task<string> GetUserInput(string title, string message)
