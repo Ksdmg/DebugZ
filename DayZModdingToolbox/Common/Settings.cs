@@ -15,7 +15,7 @@ namespace DayZModdingToolbox.Common
     public class Settings : AppConfiguration<Settings>, IConfiguration
     {
         private Settings()
-            : base(Path.Combine(Path.GetDirectoryName(Assembly.GetAssembly(typeof(App)).Location), "Settings.json"))
+            : base(Path.Combine(Directory.GetCurrentDirectory(), "Settings.json"))
         {
         }
 

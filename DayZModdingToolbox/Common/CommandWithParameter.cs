@@ -13,33 +13,37 @@ namespace DayZModdingToolbox.Common
     /// </summary>
     public class CommandWithParameter : ICommand
     {
-#pragma warning disable 67 // The event CommandWithParameter.CanExecuteChanged is never used
-
         /// <inheritdoc/>
-        public event EventHandler CanExecuteChanged;
-
-#pragma warning restore 67
+        public event EventHandler? CanExecuteChanged;
 
         /// <summary>
         /// Gets or sets the delegate that is executed by <see cref="CanExecute(object)"/>.
         /// </summary>
-        public Predicate<object> CanExecuteDelegate { get; set; }
+        public Predicate<object?>? CanExecuteDelegate { get; set; }
 
         /// <summary>
         /// Gets or sets the delegate that is executed by <see cref="Execute"/>.
         /// </summary>
-        public Action<object> ExecuteDelegate { get; set; }
+        public Action<object?>? ExecuteDelegate { get; set; }
 
         /// <inheritdoc/>
-        public bool CanExecute(object parameter)
+        public bool CanExecute(object? parameter)
         {
+            if (this.CanExecuteDelegate == null)
+            {
+                return false;
+            }
             return this.CanExecuteDelegate.Invoke(parameter);
         }
 
         /// <inheritdoc/>
-        public void Execute(object parameter)
+        public void Execute(object? parameter)
         {
-            this.ExecuteDelegate?.Invoke(parameter);
+            if (this.ExecuteDelegate == null)
+            {
+                return;
+            }
+            this.ExecuteDelegate.Invoke(parameter);
         }
     }
 }

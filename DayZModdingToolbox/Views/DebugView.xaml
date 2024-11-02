@@ -43,31 +43,34 @@
             </StackPanel>
         </GroupBox>
 
-        <GroupBox Margin="10" Grid.Row="0"
+        <GroupBox Margin="10"
+                  Grid.Row="0"
                   Grid.Column="1">
             <Button Content="Remove All Modlinks"
                     Height="50"
                     Margin="10"
                     Command="{Binding RemoveAllModLinks}" />
         </GroupBox>
-        <GroupBox Margin="10" Grid.Row="1"
+        <GroupBox Margin="10"
+                  Grid.Row="1"
                   Grid.Column="0">
             <Button Content="Build PBOs"
                     Height="50"
                     Margin="10"
                     Command="{Binding BuildPbos}" />
         </GroupBox>
-        <GroupBox Margin="10" Grid.Row="1"
-                   Grid.Column="1">
-            <StackPanel>               
-            
-            <mah:ToggleSwitch OnContent="Client+Server"
-                              OffContent="Server"
-                              IsOn="{Binding ClientAndServerDebug}"/>
-            <Button Content="Start MP Debugging"
-                    Height="50"
-                    Margin="10"
-                    Command="{Binding StartMpDebugging}" />
+        <GroupBox Margin="10"
+                  Grid.Row="1"
+                  Grid.Column="1">
+            <StackPanel>
+
+                <mah:ToggleSwitch OnContent="Client+Server"
+                                  OffContent="Server"
+                                  IsOn="{Binding ClientAndServerDebug}" />
+                <Button Content="Start MP Debugging"
+                        Height="50"
+                        Margin="10"
+                        Command="{Binding StartMpDebugging}" />
             </StackPanel>
         </GroupBox>
 
@@ -78,6 +81,27 @@
                     Height="50"
                     Margin="10"
                     Command="{Binding StartWorkbench}" />
+        </GroupBox>
+
+        <GroupBox Margin="10"
+                  Grid.Row="2"
+                  Grid.Column="0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="0"
+                        Content="Extract GameData"
+                        Height="50"
+                        Margin="10"
+                        Command="{Binding ExtractGameData}" />
+                <Button Grid.Column="1"
+                        Content="Cleanup WorkDrive"
+                        Height="50"
+                        Margin="10"
+                        Command="{Binding CleanupWorkdrive}" />
+            </Grid>
         </GroupBox>
     </Grid>
 </UserControl>

@@ -21,28 +21,17 @@
             this.action = action;
         }
 
-#pragma warning disable 67 // The event CommandWithParameter.CanExecuteChanged is never used
+        /// <inheritdoc/>
+        public event EventHandler? CanExecuteChanged;
 
         /// <inheritdoc/>
-        public event EventHandler CanExecuteChanged;
-
-#pragma warning restore 67
-
-        /// <summary>
-        /// Returns always true.
-        /// </summary>
-        /// <param name="parameter">Parameter is ignored.</param>
-        /// <returns>Always <see langword="true"/>.</returns>
-        public bool CanExecute(object parameter)
+        public bool CanExecute(object? parameter)
         {
             return true;
         }
 
-        /// <summary>
-        /// Defines the method to be called when the command is invoked.
-        /// </summary>
-        /// <param name="parameter">This parameter is ignored.</param>
-        public void Execute(object parameter)
+        /// <inheritdoc/>
+        public void Execute(object? parameter)
         {
             this.action();
         }

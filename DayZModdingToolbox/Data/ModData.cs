@@ -189,7 +189,7 @@ namespace DayZModdingToolbox.Data
             HasDayzDirLink = Directory.Exists(GetDayzDirLinkPath());
         }
 
-        protected override bool SetProperty<T>(ref T storage, T value, [CallerMemberName] string propertyName = null)
+        protected override bool SetProperty<T>(ref T storage, T value, [CallerMemberName] string? propertyName = null)
         {
             var retVal = base.SetProperty(ref storage, value, propertyName);
 

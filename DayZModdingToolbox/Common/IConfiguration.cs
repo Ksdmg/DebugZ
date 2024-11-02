@@ -14,7 +14,7 @@ namespace DayZModdingToolbox.Common
         /// <summary>
         /// Gets singleton instance.
         /// </summary>
-        public static object Instance { get; }
+        public static object? Instance { get; }
 
         /// <summary>
         /// Gets a string to use during encryption of settings.

@@ -16,7 +16,7 @@
         () =>
         {
             // Create new instance from type T with private constructor (from inherited type)
-            T retVal = (T)Activator.CreateInstance(typeof(T), true);
+            T retVal = (T)Activator.CreateInstance(typeof(T), true)!;
             Load(retVal);
             return retVal;
         });
@@ -51,7 +51,7 @@
                 }
 
                 filepath = Path.GetFileName(filepath);
-                filepath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Incoe", filepath);
+                filepath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "DayzModdingToolbox", filepath);
             }
 
             this.EncryptionKey = encryptionKey;
@@ -82,7 +82,7 @@
         {
             if (!Directory.Exists(Path.GetDirectoryName(this.FileSavePath)))
             {
-                _ = Directory.CreateDirectory(Path.GetDirectoryName(this.FileSavePath));
+                _ = Directory.CreateDirectory(Path.GetDirectoryName(this.FileSavePath)!);
             }
 
             File.WriteAllText(this.FileSavePath, JsonConvert.SerializeObject(Lazy.Value, Formatting.Indented));
