@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using DayZModdingToolbox.ViewModels;
 
 namespace DayZModdingToolbox.Views
 {
@@ -23,6 +24,18 @@ namespace DayZModdingToolbox.Views
         public DebugView()
         {
             InitializeComponent();
+
+            this.Loaded += DebugView_Loaded;
+        }
+
+        private void DebugView_Loaded(object sender, RoutedEventArgs e)
+        {
+            var vm = (DebugViewModel)this.DataContext;
+
+            if (vm != null)
+            {
+                vm.UpdateForeignBindings();
+            }
         }
     }
 }

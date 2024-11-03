@@ -36,10 +36,22 @@
                     <Run Text="{Binding ActiveModsCount, Mode=OneWay}" />
                     <Run Text=" active mods" />
                 </TextBlock>
-                <Button Content="Setup Modlinks"
-                        Height="50"
-                        Margin="10"
-                        Command="{Binding SetupModLinks}" />
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Button Grid.Column="0"
+                            Content="Refresh"
+                            Height="50"
+                            Margin="10"
+                            Command="{Binding SetupModLinks}" />
+                    <Button Grid.Column="1"
+                            Content="Setup Modlinks"
+                            Height="50"
+                            Margin="10"
+                            Command="{Binding SetupModLinks}" />
+                </Grid>
             </StackPanel>
         </GroupBox>
 
@@ -73,9 +85,29 @@
                         Command="{Binding StartMpDebugging}" />
             </StackPanel>
         </GroupBox>
-
         <GroupBox Margin="10"
                   Grid.Row="2"
+                  Grid.Column="1">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <Button Content="Mount P Drive"
+                        Height="50"
+                        Margin="10"
+                        Command="{Binding MountPDrive}" />
+
+                <Button Grid.Column="1"
+                        Content="Dismount P Drive"
+                        Height="50"
+                        Margin="10"
+                        Command="{Binding DismountPDrive}" />
+            </Grid>
+        </GroupBox>
+        <GroupBox Margin="10"
+                  Grid.Row="3"
                   Grid.Column="1">
             <Button Content="Start Workbench"
                     Height="50"

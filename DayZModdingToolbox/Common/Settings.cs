@@ -29,6 +29,7 @@ namespace DayZModdingToolbox.Common
         /// </summary>
         public string PathProfiles { get; set; } = @"%localappdata%\DayZ";
 
+        public string PathWorkDir { get; set; } = @"E:\DayZ Projects";
         public string PathWorkdrive { get; set; } = @"P:\";
         public string ServerConfigPath { get; set; } = @"serverDZ.cfg";
         public int ServerPort { get; set; } = 2302;

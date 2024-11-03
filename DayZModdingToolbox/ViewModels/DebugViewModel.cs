@@ -4,15 +4,21 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-
+using System.Windows;
 using DayZModdingToolbox.Common;
 using DayZModdingToolbox.Data;
+using Monitor.Core.Utilities;
 
 namespace DayZModdingToolbox.ViewModels
 {
     public class DebugViewModel : BindableBase
     {
         private bool _clientAndServerDebug;
+
+        public DebugViewModel()
+        {
+            UpdateForeignBindings();
+        }
 
         public int ActiveModsCount
         {
@@ -63,6 +69,20 @@ namespace DayZModdingToolbox.ViewModels
             }
         }
 
+        public Command DismountPDrive { get; } = new(() =>
+        {
+            if (!Directory.Exists(Settings.Instance.PathWorkdrive))
+            {
+                MessageBox.Show("Workdrive not mounted.");
+                return;
+            }
+
+            string workdriveTool = Path.Combine(Settings.Instance.PathDayzTools, "Bin", "WorkDrive", "WorkDrive.exe");
+            string args = "/y /Silent /nowarnings /dismount P:";
+
+            Process.Start(workdriveTool, args);
+        });
+
         public Command ExtractGameData
         {
             get
@@ -70,7 +90,7 @@ namespace DayZModdingToolbox.ViewModels
                 return new(() =>
                 {
                     string workdrive = Path.Combine(Settings.Instance.PathDayzTools, "Bin", "WorkDrive", "WorkDrive.exe");
-                    string args = "/ExtractGameData";
+                    string args = $"/ExtractGameData \"{Settings.Instance.PathDayz}\" \"{Settings.Instance.PathWorkDir}\"";
                     Process.Start(workdrive, args);
                 });
             }
@@ -81,6 +101,31 @@ namespace DayZModdingToolbox.ViewModels
             get
             {
                 return Settings.Instance.Mods is null ? 0 : Settings.Instance.Mods.Count(x => x.HasDayzDirLink && x.HasWorkdriveLink);
+            }
+        }
+
+        public Command MountPDrive { get; } = new(() =>
+        {
+            if (Directory.Exists(Settings.Instance.PathWorkdrive))
+            {
+                MessageBox.Show("Workdrive already mounted.");
+                return;
+            }
+
+            string workdriveTool = Path.Combine(Settings.Instance.PathDayzTools, "Bin", "WorkDrive", "WorkDrive.exe");
+            string args = $"/y /Silent /nowarnings /mount P: \"{Settings.Instance.PathWorkDir}\"";
+
+            Process.Start(workdriveTool, args);
+        });
+
+        public Command RefreshModLinks
+        {
+            get
+            {
+                return new(() =>
+                {
+                    UpdateForeignBindings();
+                });
             }
         }
 
@@ -120,6 +165,25 @@ namespace DayZModdingToolbox.ViewModels
             {
                 return new(() =>
                  {
+                     // Check scripts link
+                     var scriptsDirInfo = new DirectoryInfo(Path.Combine(Settings.Instance.PathDayz, "scripts"));
+                     if (scriptsDirInfo.Exists)
+                     {
+                         if (!((scriptsDirInfo.Attributes & FileAttributes.ReparsePoint) == FileAttributes.ReparsePoint))
+                         {
+                             var result = MessageBox.Show("Warning: Your scripts folder is not a symbolic link. Do you want to remove the folder and recreate it as symbolic link?", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                             if (result == MessageBoxResult.Yes)
+                             {
+                                 scriptsDirInfo.Delete(true);
+                                 JunctionPoint.Create(Path.Combine(Settings.Instance.PathDayz, "scripts"), Path.Combine(Settings.Instance.PathWorkdrive, "scripts"), true);
+                             }
+                         }
+                     }
+                     else
+                     {
+                         JunctionPoint.Create(Path.Combine(Settings.Instance.PathDayz, "scripts"), Path.Combine(Settings.Instance.PathWorkdrive, "scripts"), true);
+                     }
+
                      foreach (ModData mod in Settings.Instance.Mods)
                      {
                          mod.Update();
@@ -129,13 +193,11 @@ namespace DayZModdingToolbox.ViewModels
                          {
                              if (!mod.HasDayzDirLink)
                              {
-                                 Directory.CreateDirectory(string.Join(@"\", mod.GetDayzDirLinkPath().Split(@"\")[..^1]));
-                                 _ = Directory.CreateSymbolicLink(mod.GetDayzDirLinkPath(), mod.ModPath);
+                                 JunctionPoint.Create(mod.GetDayzDirLinkPath(), mod.ModPath, true);
                              }
                              if (!mod.HasWorkdriveLink)
                              {
-                                 Directory.CreateDirectory(string.Join(@"\", mod.GetWorkdriveLinkPath().Split(@"\")[..^1]));
-                                 _ = Directory.CreateSymbolicLink(mod.GetWorkdriveLinkPath(), mod.ModPath);
+                                 JunctionPoint.Create(mod.GetWorkdriveLinkPath(), mod.ModPath, true);
                              }
                          }
 
@@ -228,17 +290,18 @@ namespace DayZModdingToolbox.ViewModels
             {
                 if (mod.IsActive)
                 {
-                    mods.Add(mod.GetWorkdriveLinkPath());
+                    var modPath = mod.GetWorkdriveLinkPath();
+                    if (modPath.EndsWith('\\')) { modPath = modPath[..^1]; };
+                    mods.Add(modPath);
                 }
             }
-
-            string workbenchArgs = $"\"-mod={string.Join(';', mods)}\"";
+            string workbenchArgs = "-scriptDebug=true";
+            if (mods.Count > 0) { workbenchArgs = $" \"-mod={string.Join(';', mods)}\""; }
             string workbench = Path.Combine(Settings.Instance.PathDayzTools, "Bin", "Workbench", "workbenchApp.exe");
-            var info = new ProcessStartInfo(workbench, workbench);
-            info.WorkingDirectory = Settings.Instance.PathDayz;
+            var info = new ProcessStartInfo(workbench, workbenchArgs);
+            info.WorkingDirectory = Path.GetDirectoryName(workbench);
             Process.Start(info);
-        }
-        );
+        });
 
         public void UpdateForeignBindings()
         {

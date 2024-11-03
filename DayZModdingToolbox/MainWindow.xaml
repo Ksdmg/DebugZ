@@ -303,33 +303,9 @@
                     <mah:HamburgerMenuIconItem Icon="{iconPacks:Material Kind=Bug}"
                                                Label="Debug">
                         <mah:HamburgerMenuIconItem.Tag>
-                            <views:DebugView />
+                            <views:DebugView  />
                         </mah:HamburgerMenuIconItem.Tag>
                     </mah:HamburgerMenuIconItem>
-                    <!--<mah:HamburgerMenuIconItem Icon="{iconPacks:Material Kind=AccountCircle}"
-                                               Label="Private">
-                        -->
-                    <!--<mah:HamburgerMenuIconItem.Tag>
-                            <local:PrivateView />
-                        </mah:HamburgerMenuIconItem.Tag>-->
-                    <!--
-                    </mah:HamburgerMenuIconItem>-->
-                    <!--<mah:HamburgerMenuIconItem Icon="{iconPacks:Octicons Kind=Briefcase}"
-                                               Label="Briefcase">
-                        <mah:HamburgerMenuIconItem.Tag>
-                            <UserControl>
-                                <StackPanel Orientation="Vertical">
-                                    <mah:ToggleSwitch Margin="0 0 0 5"
-                                                      Header="Lorem ipsum dolor sit amet, consectetur adipiscing elit" />
-                                    <mah:ToggleSwitch Margin="0 0 0 5"
-                                                      Header="Ut dictum arcu egestas aliquet elementum"
-                                                      IsOn="True" />
-                                    <mah:ToggleSwitch Margin="0 0 0 5"
-                                                      Header="Pellentesque ultricies metus quis dui luctus, vel faucibus risus rhoncus" />
-                                </StackPanel>
-                            </UserControl>
-                        </mah:HamburgerMenuIconItem.Tag>
-                    </mah:HamburgerMenuIconItem>-->
                 </mah:HamburgerMenuItemCollection>
             </mah:HamburgerMenu.ItemsSource>
 

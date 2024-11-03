@@ -133,17 +133,17 @@ namespace DayZModdingToolbox.Data
 
         public string GetDayzDirLinkPath()
         {
-            return Path.Combine(Settings.Instance.PathDayz, GetModpackRelativePath(), "addons", ModName);
+            return Path.Combine(Settings.Instance.PathDayz, GetModpackRelativePath(), ModName);
         }
 
         public string GetModDir()
         {
-            return Path.Combine(Settings.Instance.PathWorkdrive, "Mods", GetModpackRelativePath(), ModName);
+            return Path.Combine(Settings.Instance.PathWorkdrive, "Mods", GetModpackRelativePath(), $"@{ModName}")[..^1];
         }
 
         public string GetModpackDir()
         {
-            return Path.Combine(Settings.Instance.PathWorkdrive, "Mods", Modpack);
+            return Path.Combine(Settings.Instance.PathWorkdrive, "Mods", Modpack)[..^1];
         }
 
         public string GetModpackFullPath()

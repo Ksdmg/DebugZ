@@ -13,6 +13,7 @@ namespace DayZModdingToolbox.ViewModels
         private string _pathDayz;
         private string _pathDayzTools;
         private string _pathProfiles;
+        private string _pathWorkDir;
         private string _pathWorkdrive;
         private string _serverConfigPath;
         private int _serverPort;
@@ -27,6 +28,7 @@ namespace DayZModdingToolbox.ViewModels
             _pathWorkdrive = Settings.Instance.PathWorkdrive;
             _serverConfigPath = Settings.Instance.ServerConfigPath;
             _serverPort = Settings.Instance.ServerPort;
+            _pathWorkDir = Settings.Instance.PathWorkDir;
 
             UpdateList = new(() =>
             {
@@ -159,6 +161,21 @@ namespace DayZModdingToolbox.ViewModels
                 if (SetProperty(ref _pathProfiles, value))
                 {
                     Settings.Instance.PathProfiles = value;
+                }
+            }
+        }
+
+        public string PathWorkDir
+        {
+            get
+            {
+                return _pathWorkDir;
+            }
+            set
+            {
+                if (SetProperty(ref _pathWorkDir, value))
+                {
+                    Settings.Instance.PathWorkDir = value;
                 }
             }
         }

@@ -1,0 +1,10 @@
+{
+  "Filepatching": true,
+  "Mods": [],
+  "PathDayz": "E:\\SteamLibrary\\steamapps\\common\\DayZ",
+  "PathDayzTools": "E:\\SteamLibrary\\steamapps\\common\\DayZ Tools",
+  "PathProfiles": "%localappdata%\\DayZ",
+  "PathWorkdrive": "P:\\",
+  "ServerConfigPath": "serverDZ.cfg",
+  "ServerPort": 2302
+}

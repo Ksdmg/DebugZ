@@ -7,7 +7,7 @@
              xmlns:vm="clr-namespace:DayZModdingToolbox.ViewModels"
              xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
              mc:Ignorable="d"
-             d:DesignHeight="450"
+             d:DesignHeight="650"
              d:DesignWidth="800"
              Background="{DynamicResource MahApps.Brushes.Window.Background}">
     <UserControl.DataContext>
@@ -91,6 +91,10 @@
             <StackPanel>
                 <TextBlock Text="Path to ServerConfigPath" />
                 <TextBox Text="{Binding ServerConfigPath}" />
+            </StackPanel>
+            <StackPanel>
+                <TextBlock Text="Path to project work dir" />
+                <TextBox Text="{Binding PathWorkDir}" />
             </StackPanel>
         </StackPanel>
         <DockPanel Grid.Row="1">
