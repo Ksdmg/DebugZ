@@ -45,7 +45,7 @@
                             Content="Refresh"
                             Height="50"
                             Margin="10"
-                            Command="{Binding SetupModLinks}" />
+                            Command="{Binding RefreshModLinks}" />
                     <Button Grid.Column="1"
                             Content="Setup Modlinks"
                             Height="50"

@@ -37,7 +37,7 @@ namespace DayZModdingToolbox.ViewModels
                 {
                     if (!Directory.Exists(mod.GetPboDir())) Directory.CreateDirectory(mod.GetPboDir());
                     string project = string.Empty;
-                    if (string.IsNullOrEmpty(mod.Modpack)) project = $" -project={mod.Modpack}";
+                    if (!string.IsNullOrEmpty(mod.Modpack)) project = $" -project={mod.Modpack}";
                     string args = $"{mod.GetWorkdriveLinkPath()} {mod.GetPboDir()} -clear{project}";
                     packing.Add(Process.Start(Path.Combine(Settings.Instance.PathDayzTools, "Bin", "AddonBuilder", "AddonBuilder.exe"), args));
                 }
@@ -51,8 +51,11 @@ namespace DayZModdingToolbox.ViewModels
                 return new(() =>
                 {
                     string currentDir = Directory.GetCurrentDirectory();
-                    var FixScripts = Path.Combine(currentDir, "FixScripts.bat");
-                    Process.Start(FixScripts);
+                    string fixscriptsFile = Path.Combine(currentDir, "FixScripts.bat");
+
+                    ReplaceLineInFile($"set ROOT_DIR={Path.Combine(Settings.Instance.PathWorkdrive, "scripts")}\r\n", fixscriptsFile, 9);
+
+                    Process.Start(fixscriptsFile);
                 });
             }
         }
@@ -124,6 +127,11 @@ namespace DayZModdingToolbox.ViewModels
             {
                 return new(() =>
                 {
+                    if (!Path.Exists(Settings.Instance.PathWorkdrive))
+                    {
+                        MessageBox.Show("Workdrive not mounted.");
+                        return;
+                    }
                     UpdateForeignBindings();
                 });
             }
@@ -165,6 +173,12 @@ namespace DayZModdingToolbox.ViewModels
             {
                 return new(() =>
                  {
+                     if (!Path.Exists(Settings.Instance.PathWorkdrive))
+                     {
+                         MessageBox.Show("Mount workdrive first.");
+                         return;
+                     }
+
                      // Check scripts link
                      var scriptsDirInfo = new DirectoryInfo(Path.Combine(Settings.Instance.PathDayz, "scripts"));
                      if (scriptsDirInfo.Exists)
@@ -317,6 +331,13 @@ namespace DayZModdingToolbox.ViewModels
             }
 
             return mod.GetModDir();
+        }
+
+        private static void ReplaceLineInFile(string newText, string fileName, int line_to_edit)
+        {
+            string[] arrLine = File.ReadAllLines(fileName);
+            arrLine[line_to_edit - 1] = newText;
+            File.WriteAllLines(fileName, arrLine);
         }
     }
 }
